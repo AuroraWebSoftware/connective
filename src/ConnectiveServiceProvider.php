@@ -2,9 +2,9 @@
 
 namespace AuroraWebSoftware\Connective;
 
+use AuroraWebSoftware\Connective\Commands\ConnectiveCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use AuroraWebSoftware\Connective\Commands\ConnectiveCommand;
 
 class ConnectiveServiceProvider extends PackageServiceProvider
 {
