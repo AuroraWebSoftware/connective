@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ConnectiveCollection extends Collection
 {
-
     /**
      * @return ConnectiveCollection<int, ConnectiveContract>
      */
