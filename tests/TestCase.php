@@ -2,9 +2,9 @@
 
 namespace AuroraWebSoftware\Connective\Tests;
 
+use AuroraWebSoftware\Connective\ConnectiveServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use AuroraWebSoftware\Connective\ConnectiveServiceProvider;
 
 class TestCase extends Orchestra
 {
