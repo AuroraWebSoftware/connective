@@ -9,10 +9,14 @@ class ConnectiveCollection extends Collection
 {
 
     /**
-     * @return ConnectiveCollection<int, ConnectiveContract>
+     * @return ?ConnectiveCollection<int, ConnectiveContract>
      */
-    public function connectivesOfEach(): ConnectiveCollection
+    public function connectives(): ?ConnectiveCollection
     {
+        $collection = ConnectiveCollection::make();
+        $this->each(function ($item) use ($collection) {
+
+        });
 
     }
 }

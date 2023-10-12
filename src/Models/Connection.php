@@ -4,7 +4,7 @@ namespace AuroraWebSoftware\Connective\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Relation extends Model
+class Connection extends Model
 {
-    protected $table = 'connective_relations';
+    protected $table = 'connective_connections';
 }

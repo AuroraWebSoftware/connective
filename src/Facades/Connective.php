@@ -5,12 +5,13 @@ namespace AuroraWebSoftware\Connective\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \AuroraWebSoftware\Connective\Connective
+ * @method static getConnectionTypes();
+ * @see \AuroraWebSoftware\Connective\ConnectiveService
  */
 class Connective extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \AuroraWebSoftware\Connective\Connective::class;
+        return \AuroraWebSoftware\Connective\ConnectiveService::class;
     }
 }

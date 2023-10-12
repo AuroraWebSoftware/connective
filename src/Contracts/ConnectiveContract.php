@@ -3,7 +3,7 @@
 namespace AuroraWebSoftware\Connective\Contracts;
 
 use AuroraWebSoftware\Connective\Collections\ConnectiveCollection;
-use AuroraWebSoftware\Connective\Models\Relation;
+use AuroraWebSoftware\Connective\Models\Connection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,29 +12,29 @@ interface ConnectiveContract
     /**
      * @return array<string>
      */
-    public static function supportedEdgeTypes(): array;
+    public static function supportedConnectionTypes(): array;
 
     /**
      * @param Model&ConnectiveContract $model
      * @param string $type
-     * @return bool
+     * @return Connection
      */
-    public function relateTo(ConnectiveContract & Model $model, string $type): bool;
-
+    public function connectTo(ConnectiveContract & Model $model, string $type): Connection;
 
     /**
-     * @param string|array<string> $edgeTypes
-     * @return ConnectiveCollection<ConnectiveContract>
+     * returns connection model instances as a collection
+     * @param string|array $connectionTypes
+     * @param string|array<class-string> $modelTypes
+     * @return Collection<Connection>|null
      */
-    public function connectives(string|array $edgeTypes, string|array $modelTypes): ConnectiveCollection;
+    public function connections(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?Collection;
 
     /**
-     * @param string|array $edgeTypes
-     * @param string|array $modelTypes
-     * @return Collection<int, Relation>
+     * returns connected model instances (connective models) as a collection
+     * @param string|array $connectionTypes
+     * @param string|array<class-string> $modelTypes
+     * @return ConnectiveCollection<int, ConnectiveContract>|null
      */
-    public function relations(string|array $edgeTypes, string|array $modelTypes): Collection;
-
-    public function hasRelation(string $edgeTypes, string $modelTypes): bool;
+    public function connectives(string|array $connectionTypes, string|array $modelTypes): ?ConnectiveCollection;
 
 }
