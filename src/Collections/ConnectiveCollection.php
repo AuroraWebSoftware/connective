@@ -13,7 +13,7 @@ class ConnectiveCollection extends Collection
     public function connectives(): ?ConnectiveCollection
     {
         $collection = ConnectiveCollection::make();
-        $this->each(function ($item) use ($collection) {
+        $this->each(function ($item) {
 
         });
 

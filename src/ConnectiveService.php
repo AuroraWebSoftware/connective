@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Config;
 
 class ConnectiveService
 {
-
     /**
      * @return array<string>
+     *
      * @throws ConfigValueException
      */
     public function getConnectionTypes(): array
@@ -18,5 +18,4 @@ class ConnectiveService
             Config::get('connective.connection_types') :
             throw new ConfigValueException();
     }
-
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static getConnectionTypes();
+ *
  * @see \AuroraWebSoftware\Connective\ConnectiveService
  */
 class Connective extends Facade

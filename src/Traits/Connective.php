@@ -12,15 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 trait Connective
 {
     /**
-     * @param Model&ConnectiveContract $model
-     * @param string $type
-     * @return bool
      * @throws ConnectionTypeException
      */
-    public function connectTo(ConnectiveContract & Model $model, string $type): bool
+    public function connectTo(ConnectiveContract&Model $model, string $type): bool
     {
 
-        if (!in_array($type, \AuroraWebSoftware\Connective\Facades\Connective::getConnectionTypes())) {
+        if (! in_array($type, \AuroraWebSoftware\Connective\Facades\Connective::getConnectionTypes())) {
             throw new ConnectionTypeException("$type not found");
         }
 
@@ -30,19 +27,18 @@ trait Connective
                 'from_model_id' => $this->id,
                 'to_model_type' => get_class($model),
                 'to_model_id' => $model->id,
-                'connection_type' => $type
+                'connection_type' => $type,
             ]
         );
     }
 
-
     /**
      * returns connection model instances as a collection
-     * @param string|array|null $connectionTypes
-     * @param string|array<class-string> $modelTypes
+     *
+     * @param  string|array<class-string>  $modelTypes
      * @return Collection<Connection>|null
      */
-    public function connections(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?Collection
+    public function connections(string|array $connectionTypes = null, string|array $modelTypes = null): ?Collection
     {
         $query = Connection::query();
 
@@ -62,13 +58,10 @@ trait Connective
         return $query->get();
     }
 
-
     /**
-     * @param string|array|null $connectionTypes
-     * @param string|array|null $modelTypes
      * @return ConnectiveCollection<ConnectiveContract>|null
      */
-    public function connectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?ConnectiveCollection
+    public function connectives(string|array $connectionTypes = null, string|array $modelTypes = null): ?ConnectiveCollection
     {
         $connections = $this->connections($connectionTypes, $modelTypes);
         $collection = ConnectiveCollection::make();
@@ -83,5 +76,4 @@ trait Connective
 
         return $collection;
     }
-
 }
