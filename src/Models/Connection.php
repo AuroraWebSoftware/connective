@@ -12,9 +12,11 @@ class Connection extends Model
     protected $guarded = [];
 
     public int $from_model_id;
+
     public string $from_model_type;
 
     public int $to_model_id;
+
     public string $to_model_type;
 
     public function connectedTo(): ConnectiveContract&Model
