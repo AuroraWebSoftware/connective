@@ -5,7 +5,6 @@ namespace AuroraWebSoftware\Connective\Models;
 use AuroraWebSoftware\Connective\Contracts\ConnectiveContract;
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
  * @property  class-string $to_model_type
  * @property  int $to_model_id
