@@ -1,3 +1,3 @@
 composer format
-composer test
 composer analyse
+composer test
