@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  mariadb:
+    image: mariadb:10.8
+    ports:
+      - "33062:3306"
+    volumes:
+      - ~/apps/connective/mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=connective
+      - MYSQL_PASSWORD=connective
+      - MYSQL_USER=connective
+      - MYSQL_DATABASE=connective
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.50.0/24

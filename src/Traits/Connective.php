@@ -5,44 +5,56 @@ namespace AuroraWebSoftware\Connective\Traits;
 use AuroraWebSoftware\Connective\Collections\ConnectiveCollection;
 use AuroraWebSoftware\Connective\Contracts\ConnectiveContract;
 use AuroraWebSoftware\Connective\Exceptions\ConnectionTypeException;
+use AuroraWebSoftware\Connective\Exceptions\ConnectionTypeNotSupportedException;
 use AuroraWebSoftware\Connective\Models\Connection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin ConnectiveContract & Model
+ */
 trait Connective
 {
+    public function getId(): int
+    {
+        return (int) $this->getAttribute('id');
+    }
+
     /**
-     * @param Model&ConnectiveContract $model
-     * @param string $type
-     * @return bool
+     * Connect and return the connection model
+     *
      * @throws ConnectionTypeException
+     * @throws ConnectionTypeNotSupportedException
      */
-    public function connectTo(ConnectiveContract & Model $model, string $type): bool
+    public function connectTo(ConnectiveContract&Model $model, string $connectionType): Connection
     {
 
-        if (!in_array($type, \AuroraWebSoftware\Connective\Facades\Connective::getConnectionTypes())) {
-            throw new ConnectionTypeException("$type not found");
+        if (! in_array($connectionType, \AuroraWebSoftware\Connective\Facades\Connective::connectionTypes())) {
+            throw new ConnectionTypeException("$connectionType not found");
+        }
+
+        if (! in_array($connectionType, $this::supportedConnectionTypes())) {
+            throw new ConnectionTypeNotSupportedException("$connectionType not supported");
         }
 
         return Connection::firstOrCreate(
             [
                 'from_model_type' => get_class($this),
-                'from_model_id' => $this->id,
+                'from_model_id' => $this->getId(),
                 'to_model_type' => get_class($model),
-                'to_model_id' => $model->id,
-                'connection_type' => $type
+                'to_model_id' => $model->getId(),
+                'connection_type' => $connectionType,
             ]
         );
     }
 
-
     /**
      * returns connection model instances as a collection
-     * @param string|array|null $connectionTypes
-     * @param string|array<class-string> $modelTypes
+     *
+     * @param  string|array<class-string>  $modelTypes
      * @return Collection<Connection>|null
      */
-    public function connections(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?Collection
+    public function connections(string|array $connectionTypes = null, string|array $modelTypes = null): ?Collection
     {
         $query = Connection::query();
 
@@ -62,13 +74,10 @@ trait Connective
         return $query->get();
     }
 
-
     /**
-     * @param string|array|null $connectionTypes
-     * @param string|array|null $modelTypes
      * @return ConnectiveCollection<ConnectiveContract>|null
      */
-    public function connectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?ConnectiveCollection
+    public function connectives(string|array $connectionTypes = null, string|array $modelTypes = null): ?ConnectiveCollection
     {
         $connections = $this->connections($connectionTypes, $modelTypes);
         $collection = ConnectiveCollection::make();
@@ -83,5 +92,4 @@ trait Connective
 
         return $collection;
     }
-
 }

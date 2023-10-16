@@ -4,18 +4,28 @@ namespace AuroraWebSoftware\Connective\Collections;
 
 use AuroraWebSoftware\Connective\Contracts\ConnectiveContract;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 class ConnectiveCollection extends Collection
 {
     /**
-     * @return ?ConnectiveCollection<int, ConnectiveContract>
+     * @return ?ConnectiveCollection<ConnectiveContract>
      */
-    public function connectives(): ?ConnectiveCollection
+    public function connectives(string|array $connectionTypes = null, string|array $modelTypes = null): ?ConnectiveCollection
     {
+        /**
+         * @var ConnectiveCollection<ConnectiveContract> $collection;
+         */
         $collection = ConnectiveCollection::make();
-        $this->each(function ($item) use ($collection) {
+        $this->unique()->each(function (ConnectiveContract&Model $item) use ($collection, $connectionTypes, $modelTypes) {
 
+            $item->connectives($connectionTypes, $modelTypes)
+                ->unique()
+                ->each(function (ConnectiveContract&Model $item2) use ($collection) {
+                    $collection->push($item2);
+                });
         });
 
+        return $collection;
     }
 }

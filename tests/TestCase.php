@@ -32,5 +32,14 @@ class TestCase extends Orchestra
         $migration = include __DIR__.'/../database/migrations/create_connective_table.php.stub';
         $migration->up();
         */
+
+        // for GitHub tests wirh mysql
+        // config()->set('database.default', 'mysql');
+
+        // for local tests with sqlite
+        config()->set('database.default', 'testing');
+
+        // for local tests with mysql
+        config()->set('database.default', 'mysql');
     }
 }

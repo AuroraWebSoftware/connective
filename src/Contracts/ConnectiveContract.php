@@ -3,6 +3,8 @@
 namespace AuroraWebSoftware\Connective\Contracts;
 
 use AuroraWebSoftware\Connective\Collections\ConnectiveCollection;
+use AuroraWebSoftware\Connective\Exceptions\ConnectionTypeException;
+use AuroraWebSoftware\Connective\Exceptions\ConnectionTypeNotSupportedException;
 use AuroraWebSoftware\Connective\Models\Connection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -14,27 +16,29 @@ interface ConnectiveContract
      */
     public static function supportedConnectionTypes(): array;
 
+    public function getId(): int;
+
     /**
-     * @param Model&ConnectiveContract $model
-     * @param string $type
-     * @return Connection
+     * Connect and return the connection model
+     *
+     * @throws ConnectionTypeException
+     * @throws ConnectionTypeNotSupportedException
      */
-    public function connectTo(ConnectiveContract & Model $model, string $type): Connection;
+    public function connectTo(ConnectiveContract&Model $model, string $connectionType): Connection;
 
     /**
      * returns connection model instances as a collection
-     * @param string|array $connectionTypes
-     * @param string|array<class-string> $modelTypes
+     *
+     * @param  string|array<class-string>  $modelTypes
      * @return Collection<Connection>|null
      */
-    public function connections(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?Collection;
+    public function connections(string|array $connectionTypes = null, string|array $modelTypes = null): ?Collection;
 
     /**
      * returns connected model instances (connective models) as a collection
-     * @param string|array $connectionTypes
-     * @param string|array<class-string> $modelTypes
+     *
+     * @param  string|array<class-string>  $modelTypes
      * @return ConnectiveCollection<int, ConnectiveContract>|null
      */
     public function connectives(string|array $connectionTypes, string|array $modelTypes): ?ConnectiveCollection;
-
 }
