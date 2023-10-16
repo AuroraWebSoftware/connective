@@ -5,19 +5,18 @@ namespace AuroraWebSoftware\Connective\Models;
 use AuroraWebSoftware\Connective\Contracts\ConnectiveContract;
 use Illuminate\Database\Eloquent\Model;
 
+
+/**
+ * @property  class-string $to_model_type
+ * @property  int $to_model_id
+ * @property  class-string $from_model_type
+ * @property  int $from_model_id
+ */
 class Connection extends Model
 {
     protected $table = 'connective_connections';
 
     protected $guarded = [];
-
-    public int $from_model_id;
-
-    public string $from_model_type;
-
-    public int $to_model_id;
-
-    public string $to_model_type;
 
     public function connectedTo(): ConnectiveContract&Model
     {
