@@ -358,3 +358,5 @@ it('can get nested connectives a model', function () {
     expect($connective2->connectives()->connectives()->connectives()->connectives(modelTypes: \AuroraWebSoftware\Connective\Tests\Models\OtherConnective::class))->toHaveCount(0);
 
 });
+
+// connected to ve coonetedfrom testleri
