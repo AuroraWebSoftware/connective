@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class create_connective_tables extends Migration
+return new class extends Migration
 {
     public function up(): void
     {
@@ -25,4 +25,4 @@ class create_connective_tables extends Migration
     {
         Schema::dropIfExists('connective_relations');
     }
-}
+};

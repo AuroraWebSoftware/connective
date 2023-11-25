@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Schema;
 beforeEach(function () {
     Artisan::call('migrate:fresh');
 
-    include_once __DIR__.'/../database/migrations/2023_10_11_192125_create_connectives_table.php';
-    (new create_connective_tables)->up();
+    //include_once __DIR__.'/../database/migrations/2023_10_11_192125_create_connectives_table.php';
+    //(new create_connective_tables)->up();
 
     Config::set(
         [
