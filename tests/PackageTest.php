@@ -4,6 +4,7 @@ use AuroraWebSoftware\Connective\Contracts\ConnectiveContract;
 use AuroraWebSoftware\Connective\Exceptions\ConnectionTypeException;
 use AuroraWebSoftware\Connective\Facades\Connective;
 use AuroraWebSoftware\Connective\Models\Connection;
+use AuroraWebSoftware\Connective\Tests\Models\OtherConnective;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Artisan;
@@ -228,7 +229,7 @@ it('can get connectives of a model', function () {
         'name' => 'name63',
     ]);
 
-    $otherConnective1 = \AuroraWebSoftware\Connective\Tests\Models\OtherConnective::create([
+    $otherConnective1 = OtherConnective::create([
         'name' => 'othername1',
     ]);
 
@@ -252,12 +253,12 @@ it('can get connectives of a model', function () {
         ->toHaveCount(1)
         ->each->toBeInstanceOf(ConnectiveContract::class);
 
-    expect($connective2->connectives(connectionTypes: 'b', modelTypes: \AuroraWebSoftware\Connective\Tests\Models\OtherConnective::class))
+    expect($connective2->connectives(connectionTypes: 'b', modelTypes: OtherConnective::class))
         ->toHaveCount(0);
 
     $connective2->connectTo($otherConnective1, 'b');
 
-    expect($connective2->connectives(connectionTypes: 'b', modelTypes: \AuroraWebSoftware\Connective\Tests\Models\OtherConnective::class))
+    expect($connective2->connectives(connectionTypes: 'b', modelTypes: OtherConnective::class))
         ->toHaveCount(1);
 });
 
@@ -294,14 +295,14 @@ it('can get nested connectives a model', function () {
     /**
      * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $otherConnective1
      */
-    $otherConnective1 = \AuroraWebSoftware\Connective\Tests\Models\OtherConnective::create([
+    $otherConnective1 = OtherConnective::create([
         'name' => 'othername71',
     ]);
 
     /**
      * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $otherConnective2
      */
-    $otherConnective2 = \AuroraWebSoftware\Connective\Tests\Models\OtherConnective::create([
+    $otherConnective2 = OtherConnective::create([
         'name' => 'othername72',
     ]);
 
@@ -325,7 +326,7 @@ it('can get nested connectives a model', function () {
         $connective2->connectives()
             ->connectives(
                 ['a', 'b'],
-                \AuroraWebSoftware\Connective\Tests\Models\OtherConnective::class))
+                OtherConnective::class))
         ->toHaveCount(2);
 
     expect(
@@ -343,7 +344,7 @@ it('can get nested connectives a model', function () {
                 ['a', 'b'],
                 [
                     \AuroraWebSoftware\Connective\Tests\Models\Connective::class,
-                    \AuroraWebSoftware\Connective\Tests\Models\OtherConnective::class,
+                    OtherConnective::class,
                 ]))
         ->toHaveCount(3);
 
@@ -355,8 +356,143 @@ it('can get nested connectives a model', function () {
 
     expect($connective2->connectives()->connectives()->connectives()->connectives(modelTypes: \AuroraWebSoftware\Connective\Tests\Models\Connective::class))->toHaveCount(2);
 
-    expect($connective2->connectives()->connectives()->connectives()->connectives(modelTypes: \AuroraWebSoftware\Connective\Tests\Models\OtherConnective::class))->toHaveCount(0);
+    expect($connective2->connectives()->connectives()->connectives()->connectives(modelTypes: OtherConnective::class))->toHaveCount(0);
 
+});
+
+it('can get inverse connections of a connective model', function () {
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective2
+     */
+    $connective2 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name200',
+    ]);
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective3
+     */
+    $connective3 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name201',
+    ]);
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective4
+     */
+    $connective4 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name202',
+    ]);
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective5
+     */
+    $connective5 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name203',
+    ]);
+
+    $connective2->connectTo($connective3, 'a');
+    $connective2->connectTo($connective3, 'b');
+
+    $connective2->connectTo($connective4, 'a');
+    $connective2->connectTo($connective4, 'b');
+
+    $connective2->connectTo($connective5, 'b');
+
+    // all (without any paramaters)
+    expect($connective2->connections())->toHaveCount(5);
+
+    // all inverse connections
+    expect($connective3->inverseConnections())->toHaveCount(2);
+    expect($connective4->inverseConnections())->toHaveCount(2);
+    expect($connective5->inverseConnections())->toHaveCount(1);
+
+    // connection type "a"
+    expect($connective2->connections('a'))->toHaveCount(2);
+    expect($connective3->inverseConnections('a'))->toHaveCount(1);
+
+    // connection type "b"
+    expect($connective2->connections('b'))->toHaveCount(3);
+    expect($connective4->inverseConnectives('b'))->toHaveCount(1);
+
+    // a and b as (with array paramater)
+    expect($connective2->connections(['a', 'b']))->toHaveCount(5);
+    expect($connective3->inverseConnectives(['a', 'b']))->toHaveCount(2);
+
+    // by model type
+    expect($connective2->connections(modelTypes: \AuroraWebSoftware\Connective\Tests\Models\Connective::class))->toHaveCount(5);
+    expect($connective2->inverseConnectives(modelTypes: \AuroraWebSoftware\Connective\Tests\Models\Connective::class))->toHaveCount(0);
+    expect($connective3->inverseConnectives(modelTypes: \AuroraWebSoftware\Connective\Tests\Models\Connective::class))->toHaveCount(2);
+
+});
+
+it('can get inverse connectives of a model', function () {
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective2
+     */
+    $connective2 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name300',
+    ]);
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective3
+     */
+    $connective3 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name301',
+    ]);
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective4
+     */
+    $connective4 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name302',
+    ]);
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective5
+     */
+    $connective5 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name303',
+    ]);
+
+    $otherConnective1 = OtherConnective::create([
+        'name' => 'othername300',
+    ]);
+
+    $connective2->connectTo($connective3, 'a');
+    $connective2->connectTo($connective4, 'a');
+    $connective2->connectTo($connective5, 'b');
+
+    expect($connective2->connectives())
+        ->toHaveCount(3)
+        ->each->toBeInstanceOf(ConnectiveContract::class);
+
+    expect($connective3->inverseConnectives())
+        ->toHaveCount(1)
+        ->each->toBeInstanceOf(ConnectiveContract::class);
+
+    expect($connective3->inverseConnectives(connectionTypes: 'a'))
+        ->toHaveCount(1)
+        ->each->toBeInstanceOf(ConnectiveContract::class);
+
+    expect($connective2->connectives(connectionTypes: 'b'))
+        ->toHaveCount(1)
+        ->each->toBeInstanceOf(ConnectiveContract::class);
+
+    expect($connective2->connectives(connectionTypes: 'b', modelTypes: \AuroraWebSoftware\Connective\Tests\Models\Connective::class))
+        ->toHaveCount(1)
+        ->each->toBeInstanceOf(ConnectiveContract::class);
+
+    expect($connective2->connectives(connectionTypes: 'b', modelTypes: OtherConnective::class))
+        ->toHaveCount(0);
+
+    $connective2->connectTo($otherConnective1, 'b');
+
+    expect($connective2->connectives(connectionTypes: 'b', modelTypes: OtherConnective::class))
+        ->toHaveCount(1);
+
+    expect($otherConnective1->inverseConnectives(connectionTypes: 'b', modelTypes: \AuroraWebSoftware\Connective\Tests\Models\Connective::class))
+        ->toHaveCount(1);
 });
 
 // connected to ve coonetedfrom testleri

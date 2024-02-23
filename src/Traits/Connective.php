@@ -54,7 +54,7 @@ trait Connective
      * @param  string|array<class-string>  $modelTypes
      * @return Collection<Connection>|null
      */
-    public function connections(string|array $connectionTypes = null, string|array $modelTypes = null): ?Collection
+    public function connections(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?Collection
     {
         $query = Connection::query();
 
@@ -77,7 +77,7 @@ trait Connective
     /**
      * @return ConnectiveCollection<ConnectiveContract>|null
      */
-    public function connectives(string|array $connectionTypes = null, string|array $modelTypes = null): ?ConnectiveCollection
+    public function connectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?ConnectiveCollection
     {
         $connections = $this->connections($connectionTypes, $modelTypes);
         $collection = ConnectiveCollection::make();
@@ -88,6 +88,51 @@ trait Connective
 
             $toModelInstance = $toModelType::find($toModelId);
             $collection->push($toModelInstance);
+        }
+
+        return $collection;
+    }
+
+    /**
+     * returns connection model instances as a collection
+     *
+     * @param  string|array<class-string>  $modelTypes
+     * @return Collection<Connection>|null
+     */
+    public function inverseConnections(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?Collection
+    {
+        $query = Connection::query();
+
+        if ($connectionTypes !== null) {
+            $connectionTypes = is_array($connectionTypes) ? $connectionTypes : [$connectionTypes];
+            $query->whereIn('connection_type', $connectionTypes);
+        }
+
+        if ($modelTypes !== null) {
+            $modelTypes = is_array($modelTypes) ? $modelTypes : [$modelTypes];
+            $query->whereIn('from_model_type', $modelTypes);
+        }
+
+        $query->where('to_model_type', get_class($this))
+            ->where('to_model_id', $this->id);
+
+        return $query->get();
+    }
+
+    /**
+     * @return ConnectiveCollection<ConnectiveContract>|null
+     */
+    public function inverseConnectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?ConnectiveCollection
+    {
+        $incomingConnections = $this->inverseConnections($connectionTypes, $modelTypes);
+        $collection = ConnectiveCollection::make();
+
+        foreach ($incomingConnections as $incomingConnection) {
+            $fromModelType = $incomingConnection->from_model_type;
+            $fromModelId = $incomingConnection->from_model_id;
+
+            $fromModelInstance = $fromModelType::find($fromModelId);
+            $collection->push($fromModelInstance);
         }
 
         return $collection;
