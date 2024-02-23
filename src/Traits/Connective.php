@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 trait Connective
 {
-    public function getId(): int
+    public function getId(): int|string
     {
         return (int) $this->getAttribute('id');
     }
