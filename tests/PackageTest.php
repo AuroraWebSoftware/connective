@@ -471,7 +471,6 @@ it('can get inverse connectives of a model', function () {
         ->toHaveCount(1)
         ->each->toBeInstanceOf(ConnectiveContract::class);
 
-
     expect($connective3->inverseConnectives(connectionTypes: 'a'))
         ->toHaveCount(1)
         ->each->toBeInstanceOf(ConnectiveContract::class);
@@ -495,7 +494,5 @@ it('can get inverse connectives of a model', function () {
     expect($otherConnective1->inverseConnectives(connectionTypes: 'b', modelTypes: \AuroraWebSoftware\Connective\Tests\Models\Connective::class))
         ->toHaveCount(1);
 });
-
-
 
 // connected to ve coonetedfrom testleri
