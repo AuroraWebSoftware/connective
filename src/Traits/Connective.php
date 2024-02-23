@@ -54,7 +54,7 @@ trait Connective
      * @param  string|array<class-string>  $modelTypes
      * @return Collection<Connection>|null
      */
-    public function connections(string|array $connectionTypes = null, string|array $modelTypes = null): ?Collection
+    public function connections(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?Collection
     {
         $query = Connection::query();
 
@@ -77,7 +77,7 @@ trait Connective
     /**
      * @return ConnectiveCollection<ConnectiveContract>|null
      */
-    public function connectives(string|array $connectionTypes = null, string|array $modelTypes = null): ?ConnectiveCollection
+    public function connectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?ConnectiveCollection
     {
         $connections = $this->connections($connectionTypes, $modelTypes);
         $collection = ConnectiveCollection::make();
@@ -99,7 +99,7 @@ trait Connective
      * @param  string|array<class-string>  $modelTypes
      * @return Collection<Connection>|null
      */
-    public function inverseConnections(string|array $connectionTypes = null, string|array $modelTypes = null): ?Collection
+    public function inverseConnections(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?Collection
     {
         $query = Connection::query();
 
@@ -122,7 +122,7 @@ trait Connective
     /**
      * @return ConnectiveCollection<ConnectiveContract>|null
      */
-    public function inverseConnectives(string|array $connectionTypes = null, string|array $modelTypes = null): ?ConnectiveCollection
+    public function inverseConnectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?ConnectiveCollection
     {
         $incomingConnections = $this->inverseConnections($connectionTypes, $modelTypes);
         $collection = ConnectiveCollection::make();

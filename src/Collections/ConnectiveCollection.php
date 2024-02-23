@@ -11,7 +11,7 @@ class ConnectiveCollection extends Collection
     /**
      * @return ?ConnectiveCollection<ConnectiveContract>
      */
-    public function connectives(string|array $connectionTypes = null, string|array $modelTypes = null): ?ConnectiveCollection
+    public function connectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null): ?ConnectiveCollection
     {
         /**
          * @var ConnectiveCollection<ConnectiveContract> $collection;
