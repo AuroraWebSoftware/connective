@@ -41,4 +41,20 @@ interface ConnectiveContract
      * @return ConnectiveCollection<int, ConnectiveContract>|null
      */
     public function connectives(string|array $connectionTypes, string|array $modelTypes): ?ConnectiveCollection;
+
+    /**
+     * returns connection model instances as a collection
+     *
+     * @param  string|array<class-string>  $modelTypes
+     * @return Collection<Connection>|null
+     */
+    public function inverseConnections(string|array $connectionTypes = null, string|array $modelTypes = null): ?Collection;
+
+    /**
+     * returns connected model instances (connective models) as a collection
+     *
+     * @param  string|array<class-string>  $modelTypes
+     * @return ConnectiveCollection<int, ConnectiveContract>|null
+     */
+    public function inverseConnectives(string|array $connectionTypes, string|array $modelTypes): ?ConnectiveCollection;
 }
