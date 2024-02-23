@@ -16,7 +16,7 @@ interface ConnectiveContract
      */
     public static function supportedConnectionTypes(): array;
 
-    public function getId(): int;
+    public function getId(): int|string;
 
     /**
      * Connect and return the connection model
