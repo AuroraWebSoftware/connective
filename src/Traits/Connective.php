@@ -77,7 +77,7 @@ trait Connective
     /**
      * @return ConnectiveCollection<ConnectiveContract>|null
      */
-    public function connectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null, array|null $ignoreScopes = []): ?ConnectiveCollection
+    public function connectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null, ?array $ignoreScopes = []): ?ConnectiveCollection
     {
         $connections = $this->connections($connectionTypes, $modelTypes);
         $collection = ConnectiveCollection::make();
@@ -86,13 +86,13 @@ trait Connective
             $toModelType = $connection->to_model_type;
             $toModelId = $connection->to_model_id;
 
-            if ($ignoreScopes && is_array($ignoreScopes)){
+            if ($ignoreScopes && is_array($ignoreScopes)) {
                 $toModelInstance = $toModelType::withoutGlobalScopes($ignoreScopes)->find($toModelId);
-            }else{
+            } else {
                 $toModelInstance = $toModelType::find($toModelId);
             }
 
-            if ($toModelInstance != null){
+            if ($toModelInstance != null) {
                 $collection->push($toModelInstance);
             }
 
@@ -130,7 +130,7 @@ trait Connective
     /**
      * @return ConnectiveCollection<ConnectiveContract>|null
      */
-    public function inverseConnectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null, array|null $ignoreScopes = []): ?ConnectiveCollection
+    public function inverseConnectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null, ?array $ignoreScopes = []): ?ConnectiveCollection
     {
         $incomingConnections = $this->inverseConnections($connectionTypes, $modelTypes);
         $collection = ConnectiveCollection::make();
@@ -139,13 +139,13 @@ trait Connective
             $fromModelType = $incomingConnection->from_model_type;
             $fromModelId = $incomingConnection->from_model_id;
 
-            if ($ignoreScopes && is_array($ignoreScopes)){
+            if ($ignoreScopes && is_array($ignoreScopes)) {
                 $fromModelInstance = $fromModelType::withoutGlobalScopes($ignoreScopes)->find($fromModelId);
-            }else{
+            } else {
                 $fromModelInstance = $fromModelType::find($fromModelId);
             }
 
-            if ($fromModelInstance != null){
+            if ($fromModelInstance != null) {
                 $collection->push($fromModelInstance);
             }
 

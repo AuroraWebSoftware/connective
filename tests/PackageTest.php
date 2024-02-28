@@ -383,7 +383,6 @@ it('can get connectives some scopes can be excluded in a model that', function (
         'name' => 'name74',
     ]);
 
-
     \AuroraWebSoftware\Connective\Tests\Models\Connective::addGlobalScope('name', function (\Illuminate\Database\Eloquent\Builder $builder) {
         $builder->where('name', 'name73');
     });
@@ -392,9 +391,8 @@ it('can get connectives some scopes can be excluded in a model that', function (
     $connective2->connectTo($connective4, 'a');
 
     expect($connective2->connectives('a'))->toHaveCount(1);
-    expect($connective2->connectives('a', null,['name']))->toHaveCount(2);
+    expect($connective2->connectives('a', null, ['name']))->toHaveCount(2);
 });
-
 
 it('can get inverse connections of a connective model', function () {
 
