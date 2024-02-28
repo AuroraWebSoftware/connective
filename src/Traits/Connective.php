@@ -141,9 +141,11 @@ trait Connective
 
             if ($ignoreScopes && is_array($ignoreScopes)){
                 $fromModelInstance = $fromModelType::withoutGlobalScopes($ignoreScopes)->find($fromModelId);
-                $collection->push($fromModelInstance);
             }else{
                 $fromModelInstance = $fromModelType::find($fromModelId);
+            }
+
+            if ($fromModelInstance != null){
                 $collection->push($fromModelInstance);
             }
 
