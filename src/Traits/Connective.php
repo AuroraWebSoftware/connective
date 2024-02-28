@@ -77,7 +77,7 @@ trait Connective
     /**
      * @return ConnectiveCollection<ConnectiveContract>|null
      */
-    public function connectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null, ?array $ignoreScopes = []): ?ConnectiveCollection
+    public function connectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null, ?array $ignoreScopes = null): ?ConnectiveCollection
     {
         $connections = $this->connections($connectionTypes, $modelTypes);
         $collection = ConnectiveCollection::make();
@@ -86,8 +86,8 @@ trait Connective
             $toModelType = $connection->to_model_type;
             $toModelId = $connection->to_model_id;
 
-            if ($ignoreScopes && is_array($ignoreScopes)) {
-                $toModelInstance = $toModelType::withoutGlobalScopes($ignoreScopes)->find($toModelId);
+            if (is_array($ignoreScopes)) {
+                $toModelInstance = $toModelType::withoutGlobalScopes($ignoreScopes == [] ? null : $ignoreScopes)->find($toModelId);
             } else {
                 $toModelInstance = $toModelType::find($toModelId);
             }
@@ -130,7 +130,7 @@ trait Connective
     /**
      * @return ConnectiveCollection<ConnectiveContract>|null
      */
-    public function inverseConnectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null, ?array $ignoreScopes = []): ?ConnectiveCollection
+    public function inverseConnectives(string|array|null $connectionTypes = null, string|array|null $modelTypes = null, ?array $ignoreScopes = null): ?ConnectiveCollection
     {
         $incomingConnections = $this->inverseConnections($connectionTypes, $modelTypes);
         $collection = ConnectiveCollection::make();
@@ -139,8 +139,8 @@ trait Connective
             $fromModelType = $incomingConnection->from_model_type;
             $fromModelId = $incomingConnection->from_model_id;
 
-            if ($ignoreScopes && is_array($ignoreScopes)) {
-                $fromModelInstance = $fromModelType::withoutGlobalScopes($ignoreScopes)->find($fromModelId);
+            if (is_array($ignoreScopes)) {
+                $fromModelInstance = $fromModelType::withoutGlobalScopes($ignoreScopes == [] ? null : $ignoreScopes)->find($fromModelId);
             } else {
                 $fromModelInstance = $fromModelType::find($fromModelId);
             }
