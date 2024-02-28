@@ -88,11 +88,14 @@ trait Connective
 
             if ($ignoreScopes && is_array($ignoreScopes)){
                 $toModelInstance = $toModelType::withoutGlobalScopes($ignoreScopes)->find($toModelId);
-                $collection->push($toModelInstance);
             }else{
                 $toModelInstance = $toModelType::find($toModelId);
+            }
+
+            if ($toModelInstance != null){
                 $collection->push($toModelInstance);
             }
+
         }
 
         return $collection;

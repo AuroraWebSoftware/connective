@@ -360,6 +360,42 @@ it('can get nested connectives a model', function () {
 
 });
 
+it('can get connectives some scopes can be excluded in a model that', function () {
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective2
+     */
+    $connective2 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name72',
+    ]);
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective3
+     */
+    $connective3 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name73',
+    ]);
+
+    /**
+     * @var ConnectiveContract & \AuroraWebSoftware\Connective\Tests\Models\Connective $connective4
+     */
+    $connective4 = \AuroraWebSoftware\Connective\Tests\Models\Connective::create([
+        'name' => 'name74',
+    ]);
+
+
+    \AuroraWebSoftware\Connective\Tests\Models\Connective::addGlobalScope('name', function (\Illuminate\Database\Eloquent\Builder $builder) {
+        $builder->where('name', 'name73');
+    });
+
+    $connective2->connectTo($connective3, 'a');
+    $connective2->connectTo($connective4, 'a');
+
+    expect($connective2->connectives('a'))->toHaveCount(1);
+    expect($connective2->connectives('a', null,['name']))->toHaveCount(2);
+});
+
+
 it('can get inverse connections of a connective model', function () {
 
     /**
