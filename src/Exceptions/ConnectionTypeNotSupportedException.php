@@ -4,6 +4,4 @@ namespace AuroraWebSoftware\Connective\Exceptions;
 
 use Exception;
 
-class ConnectionTypeNotSupportedException extends Exception
-{
-}
+class ConnectionTypeNotSupportedException extends Exception {}

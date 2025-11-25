@@ -16,6 +16,6 @@ class ConnectiveService
     {
         return is_array(Config::get('connective.connection_types')) ?
             Config::get('connective.connection_types') :
-            throw new ConfigValueException();
+            throw new ConfigValueException;
     }
 }

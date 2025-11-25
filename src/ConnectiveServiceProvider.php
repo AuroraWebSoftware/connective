@@ -27,7 +27,7 @@ class ConnectiveServiceProvider extends PackageServiceProvider
             ->name('connective')
             ->hasConfigFile('connective')
             ->hasViews()
-            //->hasMigration('create_connective_table')
+            // ->hasMigration('create_connective_table')
             ->hasCommand(ConnectiveCommand::class);
     }
 }
