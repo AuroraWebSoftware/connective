@@ -15,8 +15,8 @@ return new class extends Migration
             $table->string('to_model_type')->index();
             $table->integer('to_model_id')->index();
             $table->string('connection_type')->index();
-            //- from datetime -
-            //- through datetime (nullable)
+            // - from datetime -
+            // - through datetime (nullable)
             $table->timestamps();
         });
     }
